@@ -29,3 +29,5 @@ Open console in working directory and write:
 
 result:
 
+![image](https://user-images.githubusercontent.com/58893102/183279947-b2de2170-6853-4285-97ee-db02c0307287.png)
+
