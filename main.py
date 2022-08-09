@@ -107,7 +107,7 @@ def get_avg_salary_for_one_language_headhunter(language):
 
         for vacancy in all_page['items']:
             avg_salary = predict_rub_salary(vacancy)
-            if avg_salary is not None:
+            if avg_salary:
                 salary.append(avg_salary)
 
     if sum(vacancies_on_page) > all_page['found']:
