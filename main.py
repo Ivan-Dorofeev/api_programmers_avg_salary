@@ -56,15 +56,15 @@ def superjob_avg_salary(languages):
                                         })
         response.raise_for_status()
 
-        language_salaies = []
+        language_salaries = []
         for i in response.json()['objects']:
             avg_salary = predict_rub_salary_for_superJob(i)
             if avg_salary is not None:
-                language_salaies.append(avg_salary)
+                language_salaries.append(avg_salary)
 
-        if not len(language_salaies) == 0:
-            language_salary_and_vacancies['average_salary'] = int(sum(language_salaies) / len(language_salaies))
-            language_salary_and_vacancies['vacancies_processed'] = len(language_salaies)
+        if not len(language_salaries) == 0:
+            language_salary_and_vacancies['average_salary'] = int(sum(language_salaries) / len(language_salaries))
+            language_salary_and_vacancies['vacancies_processed'] = len(language_salaries)
             language_salary_and_vacancies['vacancies_found'] = response.json()['total']
 
         languages_avg_salary[language] = language_salary_and_vacancies
