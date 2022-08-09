@@ -40,28 +40,27 @@ def predict_rub_salary_for_superJob(vacantion):
     return int((vacantion['payment_from'] + vacantion['payment_to']) / 2)
 
 
-def get_avg_salary_for_one_language_superjob(language, api_key):
+def get_all_page_superjob(page, language, api_key):
     period_days = 7
     open_access = 1
+    response = requests.get('https://api.superjob.ru/2.0/vacancies',
+                            headers={'X-Api-App-Id': api_key},
+                            params={'keyword': language,
+                                    'page': page,
+                                    'published': open_access,
+                                    'period': period_days,
+                                    'town': 'Москва',
+                                    })
+    response.raise_for_status()
+    return response.json()
+
+
+def get_avg_salary_for_one_language_superjob(language, api_key):
     vacancies_salary = []
     vacancies_on_page = 0
 
     for page in count():
-        language_salary_and_vacancies = {"vacancies_found": None,
-                                         "vacancies_processed": None,
-                                         "average_salary": None
-                                         }
-        response = requests.get('https://api.superjob.ru/2.0/vacancies',
-                                headers={'X-Api-App-Id': api_key},
-                                params={'keyword': language,
-                                        'page': page,
-                                        'published': open_access,
-                                        'period': period_days,
-                                        'town': 'Москва',
-                                        })
-        response.raise_for_status()
-
-        all_page = response.json()
+        all_page = get_all_page_superjob(page, language, api_key)
         for vacancy in all_page['objects']:
             avg_salary = predict_rub_salary_for_superJob(vacancy)
             if avg_salary:
@@ -81,7 +80,7 @@ def get_avg_salary_for_one_language_superjob(language, api_key):
             'vacancies_processed': vacancies_on_page}
 
 
-def get_all_page(page, language):
+def get_all_page_hh(page, language):
     period_days = 3
     moscow_region = 1
     url = 'https://api.hh.ru/vacancies'
@@ -95,12 +94,12 @@ def get_all_page(page, language):
     return page_response.json()
 
 
-def get_avg_salary_for_one_language_headhumter(language):
+def get_avg_salary_for_one_language_headhunter(language):
     salary = []
     vacancies_on_page = []
 
     for page in count():
-        all_page = get_all_page(page, language)
+        all_page = get_all_page_hh(page, language)
         if page >= all_page['pages']:
             break
 
@@ -131,7 +130,7 @@ def get_avg_salary_superjob(languages, api_key):
 def get_avg_salary_headhumter(languages):
     languagies_avg_salary = {}
     for language in languages:
-        languagies_avg_salary[language] = get_avg_salary_for_one_language_headhumter(language)
+        languagies_avg_salary[language] = get_avg_salary_for_one_language_headhunter(language)
     return languagies_avg_salary
 
 
