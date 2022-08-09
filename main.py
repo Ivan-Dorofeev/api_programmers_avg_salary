@@ -122,7 +122,7 @@ def get_avg_salary_headhumter(languages):
     return languagies_avg_salary
 
 
-if __name__ == '__main__':
+def main():
     load_dotenv()
     languages = ['python', 'java', 'goland', 'javascript', 'ruby', 'c++']
 
@@ -131,3 +131,7 @@ if __name__ == '__main__':
 
     avg_salary_headhumter = get_avg_salary_headhumter(languages)
     make_table('HeadHunter', avg_salary_headhumter)
+
+
+if __name__ == '__main__':
+    main()
