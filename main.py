@@ -40,15 +40,16 @@ def predict_rub_salary_for_superJob(vacantion):
     return int((vacantion['payment_from'] + vacantion['payment_to']) / 2)
 
 
-def get_avg_salary_for_one_language_superjob(language):
+def get_avg_salary_for_one_language_superjob(language, api_key):
     period_days = 7
     open_access = 1
+
     language_salary_and_vacancies = {"vacancies_found": None,
                                      "vacancies_processed": None,
                                      "average_salary": None
                                      }
     response = requests.get('https://api.superjob.ru/2.0/vacancies',
-                            headers={'X-Api-App-Id': os.environ['SUPERJOB_SECRET_KEY']},
+                            headers={'X-Api-App-Id': api_key},
                             params={'keyword': language,
                                     'published': open_access,
                                     'period': period_days,
@@ -111,10 +112,10 @@ def get_avg_salary_for_one_language_headhumter(language):
             'vacancies_processed': vacancies_processed}
 
 
-def get_avg_salary_superjob(languages):
+def get_avg_salary_superjob(languages, api_key):
     languages_avg_salary = {}
     for language in languages:
-        languages_avg_salary[language] = get_avg_salary_for_one_language_superjob(language)
+        languages_avg_salary[language] = get_avg_salary_for_one_language_superjob(language, api_key)
     return languages_avg_salary
 
 
@@ -127,9 +128,10 @@ def get_avg_salary_headhumter(languages):
 
 def main():
     load_dotenv()
+    super_job_api_key = os.environ['SUPERJOB_SECRET_KEY']
     languages = ['python', 'java', 'goland', 'javascript', 'ruby', 'c++']
 
-    avg_salary_superjob = get_avg_salary_superjob(languages)
+    avg_salary_superjob = get_avg_salary_superjob(languages, super_job_api_key)
     print(make_table('Superjob', avg_salary_superjob))
 
     avg_salary_headhumter = get_avg_salary_headhumter(languages)
