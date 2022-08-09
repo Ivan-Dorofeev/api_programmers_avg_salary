@@ -55,7 +55,7 @@ def get_json_page_superjob(page, language, api_key):
 
 
 def get_avg_salary_for_one_language_superjob(language, api_key):
-    vacancies_salary = []
+    vacancy_salaries = []
     vacancies_on_page = 0
 
     for page in count():
@@ -63,7 +63,7 @@ def get_avg_salary_for_one_language_superjob(language, api_key):
         for vacancy in all_page['objects']:
             avg_salary = predict_rub_salary_for_superJob(vacancy)
             if avg_salary:
-                vacancies_salary.append(avg_salary)
+                vacancy_salaries.append(avg_salary)
                 vacancies_on_page += 1
 
         if not all_page['more']:
@@ -74,7 +74,7 @@ def get_avg_salary_for_one_language_superjob(language, api_key):
                 'vacancies_found': None,
                 'vacancies_processed': None}
 
-    return {'average_salary': int(sum(vacancies_salary) / len(vacancies_salary)),
+    return {'average_salary': int(sum(vacancy_salaries) / len(vacancy_salaries)),
             'vacancies_found': all_page['total'],
             'vacancies_processed': vacancies_on_page}
 
@@ -94,7 +94,7 @@ def get_json_page_hh(page, language):
 
 
 def get_avg_salary_for_one_language_headhunter(language):
-    salary = []
+    vacancy_salaries = []
     vacancies_on_page = []
 
     for page in count():
@@ -107,14 +107,14 @@ def get_avg_salary_for_one_language_headhunter(language):
         for vacancy in all_page['items']:
             avg_salary = predict_rub_salary_for_hh(vacancy)
             if avg_salary:
-                salary.append(avg_salary)
+                vacancy_salaries.append(avg_salary)
 
     if sum(vacancies_on_page) > all_page['found']:
         vacancies_processed = all_page['found']
     else:
         vacancies_processed = sum(vacancies_on_page)
 
-    return {'average_salary': int(sum(salary) / len(salary)),
+    return {'average_salary': int(sum(vacancy_salaries) / len(vacancy_salaries)),
             'vacancies_found': all_page['found'],
             'vacancies_processed': vacancies_processed}
 
