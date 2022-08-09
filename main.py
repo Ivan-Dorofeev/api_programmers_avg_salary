@@ -34,9 +34,9 @@ def predict_rub_salary_for_superJob(vacantion):
     if not vacantion['payment_from'] and not vacantion['payment_to']:
         return None
     elif vacantion['payment_from'] and not vacantion['payment_to']:
-        return int((vacantion['payment_from'] + vacantion['payment_to']) * 1.2)
+        return int(vacantion['payment_from'] * 1.2)
     elif not vacantion['payment_from'] and vacantion['payment_to']:
-        return int((vacantion['payment_from'] + vacantion['payment_to']) * 0.8)
+        return int(vacantion['payment_to'] * 0.8)
     return int((vacantion['payment_from'] + vacantion['payment_to']) / 2)
 
 
@@ -143,8 +143,8 @@ def main():
     avg_salary_superjob = get_avg_salary_superjob(languages, super_job_api_key)
     print(make_table('Superjob', avg_salary_superjob))
 
-    # avg_salary_headhumter = get_avg_salary_headhumter(languages)
-    # print(make_table('HeadHunter', avg_salary_headhumter))
+    avg_salary_headhumter = get_avg_salary_headhumter(languages)
+    print(make_table('HeadHunter', avg_salary_headhumter))
 
 
 if __name__ == '__main__':
