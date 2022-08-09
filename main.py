@@ -38,7 +38,6 @@ def predict_rub_salary_for_superJob(vacantion):
 
 
 def superjob_avg_salary(languages):
-    load_dotenv()
     languages_avg_salary = {}
     for language in languages:
         language_data = {"vacancies_found": None,
@@ -109,6 +108,7 @@ def hh_avg_salary(languages):
 
 
 if __name__ == '__main__':
+    load_dotenv()
     languages = ['python', 'java', 'goland', 'javascript', 'ruby', 'c++']
     superjob_avg_salary(languages)
     hh_avg_salary(languages)
