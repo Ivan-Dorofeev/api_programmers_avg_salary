@@ -16,13 +16,13 @@ def predict_rub_salary(vacancy):
     return None
 
 
-def make_table(title, table):
+def make_table(title, avg_languages_salary):
     table_rows = []
 
     table_headers = ['Языки программирования', 'Вакансий найдено', 'Вакансий обработано', 'Средняя заработная плата']
     table_rows.append(table_headers)
-    for k, v in table.items():
-        table_rows.append([k, v['vacancies_found'], v['vacancies_processed'], v['average_salary']])
+    for language, salary in avg_languages_salary.items():
+        table_rows.append([language, salary['vacancies_found'], salary['vacancies_processed'], salary['average_salary']])
 
     table = AsciiTable(table_rows, title)
     table.justify_columns[4] = 'right'
