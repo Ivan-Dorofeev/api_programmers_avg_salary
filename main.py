@@ -108,6 +108,11 @@ def get_avg_salary_for_one_language_headhunter(language):
                 vacancy_salaries.append(avg_salary)
                 vacancies_on_page += 1
 
+    if not vacancies_on_page:
+        return {'average_salary': None,
+                'vacancies_found': None,
+                'processed_vacancies': None}
+
     return {'average_salary': int(sum(vacancy_salaries) / len(vacancy_salaries)),
             'vacancies_found': all_page['found'],
             'processed_vacancies': vacancies_on_page}
