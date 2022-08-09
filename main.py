@@ -38,6 +38,9 @@ def predict_rub_salary_for_superJob(vacantion):
 
 
 def superjob_avg_salary(languages):
+    period_days = 7
+    open_access = 1
+
     languages_avg_salary = {}
     for language in languages:
         language_salary_and_vacancies = {"vacancies_found": None,
@@ -47,8 +50,8 @@ def superjob_avg_salary(languages):
         response = requests.get('https://api.superjob.ru/2.0/vacancies',
                                 headers={'X-Api-App-Id': os.environ['SUPERJOB_SECRET_KEY']},
                                 params={'keyword': language,
-                                        'published': 1,
-                                        'period': 7,
+                                        'published': open_access,
+                                        'period': period_days,
                                         'town': 'Москва',
                                         })
         response.raise_for_status()
@@ -70,6 +73,9 @@ def superjob_avg_salary(languages):
 
 
 def hh_avg_salary(languages):
+    period_days = 3
+    moscow_region = 1
+
     languagies_avg_salary = {}
     for language in languages:
         salary = []
@@ -78,8 +84,8 @@ def hh_avg_salary(languages):
         for page in count():
             url = 'https://api.hh.ru/vacancies'
             vacancies_params = {'text': language,
-                                'area': 1,
-                                'period': 3,
+                                'area': moscow_region,
+                                'period': period_days,
                                 'page': page
                                 }
             page_response = requests.get(url, params=vacancies_params)
