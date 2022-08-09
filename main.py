@@ -5,17 +5,6 @@ from dotenv import load_dotenv
 from terminaltables import AsciiTable
 
 
-def predict_rub_salary(vacancy):
-    if vacancy['salary']:
-        salary_from = vacancy['salary']['from']
-        salary_to = vacancy['salary']['to']
-        if salary_from and salary_to:
-            avg_salary = int((salary_to + salary_from) / 2)
-            return avg_salary
-        return None
-    return None
-
-
 def make_table(title, avg_languages_salary):
     table_rows = []
 
@@ -28,6 +17,16 @@ def make_table(title, avg_languages_salary):
     table = AsciiTable(table_rows, title)
     table.justify_columns[4] = 'right'
     return table.table
+
+
+def predict_rub_salary_for_hh(vacancy):
+    if not vacancy['salary']:
+        return None
+    elif vacancy['salary']['from']:
+        return int(vacancy['salary']['from'] * 1.2)
+    elif vacancy['salary']['from']:
+        return int(vacancy['salary']['to'] * 0.8)
+    return int((vacancy['salary']['from'] + vacancy['salary']['to']) / 2)
 
 
 def predict_rub_salary_for_superJob(vacantion):
@@ -106,7 +105,7 @@ def get_avg_salary_for_one_language_headhunter(language):
         vacancies_on_page.append(all_page['per_page'])
 
         for vacancy in all_page['items']:
-            avg_salary = predict_rub_salary(vacancy)
+            avg_salary = predict_rub_salary_for_hh(vacancy)
             if avg_salary:
                 salary.append(avg_salary)
 
