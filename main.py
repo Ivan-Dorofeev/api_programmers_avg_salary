@@ -31,8 +31,12 @@ def make_table(title, avg_languages_salary):
 
 
 def predict_rub_salary_for_superJob(vacantion):
-    if not vacantion['payment_from'] or not vacantion['payment_to']:
+    if not vacantion['payment_from'] and not vacantion['payment_to']:
         return None
+    elif vacantion['payment_from'] and not vacantion['payment_to']:
+        return int((vacantion['payment_from'] + vacantion['payment_to']) * 1.2)
+    elif not vacantion['payment_from'] and vacantion['payment_to']:
+        return int((vacantion['payment_from'] + vacantion['payment_to']) * 0.8)
     return int((vacantion['payment_from'] + vacantion['payment_to']) / 2)
 
 
