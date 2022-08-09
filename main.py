@@ -12,7 +12,7 @@ def make_table(title, avg_languages_salary):
     table_rows.append(table_headers)
     for language, salary in avg_languages_salary.items():
         table_rows.append(
-            [language, salary['vacancies_found'], salary['vacancies_processed'], salary['average_salary']])
+            [language, salary['vacancies_found'], salary['processed_vacancies'], salary['average_salary']])
 
     table = AsciiTable(table_rows, title)
     table.justify_columns[4] = 'right'
@@ -72,11 +72,11 @@ def get_avg_salary_for_one_language_superjob(language, api_key):
     if not vacancies_on_page:
         return {'average_salary': None,
                 'vacancies_found': None,
-                'vacancies_processed': None}
+                'processed_vacancies': None}
 
     return {'average_salary': int(sum(vacancy_salaries) / len(vacancy_salaries)),
             'vacancies_found': all_page['total'],
-            'vacancies_processed': vacancies_on_page}
+            'processed_vacancies': vacancies_on_page}
 
 
 def get_json_page_hh(page, language):
@@ -95,25 +95,22 @@ def get_json_page_hh(page, language):
 
 def get_avg_salary_for_one_language_headhunter(language):
     vacancy_salaries = []
-    vacancies_on_page = []
-    vacancies_processed = 0
+    vacancies_on_page = 0
 
     for page in count():
         all_page = get_json_page_hh(page, language)
         if page >= all_page['pages']:
             break
 
-        vacancies_on_page.append(all_page['per_page'])
-
         for vacancy in all_page['items']:
             avg_salary = predict_rub_salary_for_hh(vacancy)
             if avg_salary:
                 vacancy_salaries.append(avg_salary)
-                vacancies_processed += 1
+                vacancies_on_page += 1
 
     return {'average_salary': int(sum(vacancy_salaries) / len(vacancy_salaries)),
             'vacancies_found': all_page['found'],
-            'vacancies_processed': vacancies_processed}
+            'processed_vacancies': vacancies_on_page}
 
 
 def get_avg_salary_superjob(languages, api_key):
