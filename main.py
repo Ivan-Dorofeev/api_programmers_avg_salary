@@ -59,7 +59,7 @@ def superjob_avg_salary(languages):
         language_salaries = []
         for vacancy in response.json()['objects']:
             avg_salary = predict_rub_salary_for_superJob(vacancy)
-            if avg_salary is not None:
+            if not avg_salary:
                 language_salaries.append(avg_salary)
 
         if not len(language_salaries) == 0:
