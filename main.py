@@ -17,16 +17,16 @@ def predict_rub_salary(vacancy):
 
 
 def make_table(title, table):
-    TABLE_DATA = []
+    table_rows = []
 
     table_headers = ['Языки программирования', 'Вакансий найдено', 'Вакансий обработано', 'Средняя заработная плата']
-    TABLE_DATA.append(table_headers)
+    table_rows.append(table_headers)
     for k, v in table.items():
-        TABLE_DATA.append([k, v['vacancies_found'], v['vacancies_processed'], v['average_salary']])
+        table_rows.append([k, v['vacancies_found'], v['vacancies_processed'], v['average_salary']])
 
-    table_instance = AsciiTable(TABLE_DATA, title)
-    table_instance.justify_columns[4] = 'right'
-    print(table_instance.table)
+    table = AsciiTable(table_rows, title)
+    table.justify_columns[4] = 'right'
+    print(table.table)
     print()
 
 
@@ -40,10 +40,10 @@ def predict_rub_salary_for_superJob(vacantion):
 def superjob_avg_salary(languages):
     languages_avg_salary = {}
     for language in languages:
-        language_data = {"vacancies_found": None,
-                         "vacancies_processed": None,
-                         "average_salary": None
-                         }
+        language_salary_and_vacancies = {"vacancies_found": None,
+                                         "vacancies_processed": None,
+                                         "average_salary": None
+                                         }
         response = requests.get('https://api.superjob.ru/2.0/vacancies',
                                 headers={'X-Api-App-Id': os.environ['SUPERJOB_SECRET_KEY']},
                                 params={'keyword': language,
@@ -60,11 +60,11 @@ def superjob_avg_salary(languages):
                 language_salaies.append(avg_salary)
 
         if not len(language_salaies) == 0:
-            language_data['average_salary'] = int(sum(language_salaies) / len(language_salaies))
-            language_data['vacancies_processed'] = len(language_salaies)
-            language_data['vacancies_found'] = response.json()['total']
+            language_salary_and_vacancies['average_salary'] = int(sum(language_salaies) / len(language_salaies))
+            language_salary_and_vacancies['vacancies_processed'] = len(language_salaies)
+            language_salary_and_vacancies['vacancies_found'] = response.json()['total']
 
-        languages_avg_salary[language] = language_data
+        languages_avg_salary[language] = language_salary_and_vacancies
 
     make_table('SuperJob', languages_avg_salary)
 
@@ -84,24 +84,24 @@ def hh_avg_salary(languages):
                                 }
             page_response = requests.get(url, params=vacancies_params)
             page_response.raise_for_status()
-            page_data = page_response.json()
-            if page >= page_data['pages']:
+            all_page = page_response.json()
+            if page >= all_page['pages']:
                 break
 
-            vacancies_on_page.append(page_data['per_page'])
+            vacancies_on_page.append(all_page['per_page'])
 
-            for vacancy in page_data['items']:
+            for vacancy in all_page['items']:
                 avg_salary = predict_rub_salary(vacancy)
                 if avg_salary is not None:
                     salary.append(avg_salary)
 
-        if sum(vacancies_on_page) > page_data['found']:
-            vacancies_processed = page_data['found']
+        if sum(vacancies_on_page) > all_page['found']:
+            vacancies_processed = all_page['found']
         else:
             vacancies_processed = sum(vacancies_on_page)
 
         languagies_avg_salary[language] = {'average_salary': int(sum(salary) / len(salary)),
-                                           'vacancies_found': page_data['found'],
+                                           'vacancies_found': all_page['found'],
                                            'vacancies_processed': vacancies_processed}
 
     make_table('HeadHunter', languagies_avg_salary)
