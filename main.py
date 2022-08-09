@@ -6,7 +6,7 @@ from terminaltables import AsciiTable
 
 
 def predict_rub_salary(vacancy):
-    if vacancy['salary'] is not None:
+    if not vacancy['salary']:
         salary_from = vacancy['salary']['from']
         salary_to = vacancy['salary']['to']
         if salary_from is not None and salary_to is not None:
@@ -62,7 +62,7 @@ def superjob_avg_salary(languages):
             if not avg_salary:
                 language_salaries.append(avg_salary)
 
-        if not len(language_salaries) == 0:
+        if not language_salaries:
             language_salary_and_vacancies['average_salary'] = int(sum(language_salaries) / len(language_salaries))
             language_salary_and_vacancies['vacancies_processed'] = len(language_salaries)
             language_salary_and_vacancies['vacancies_found'] = response.json()['total']
