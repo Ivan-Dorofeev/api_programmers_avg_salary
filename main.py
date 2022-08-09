@@ -22,19 +22,18 @@ def make_table(title, avg_languages_salary):
     table_headers = ['Языки программирования', 'Вакансий найдено', 'Вакансий обработано', 'Средняя заработная плата']
     table_rows.append(table_headers)
     for language, salary in avg_languages_salary.items():
-        table_rows.append([language, salary['vacancies_found'], salary['vacancies_processed'], salary['average_salary']])
+        table_rows.append(
+            [language, salary['vacancies_found'], salary['vacancies_processed'], salary['average_salary']])
 
     table = AsciiTable(table_rows, title)
     table.justify_columns[4] = 'right'
-    print(table.table)
-    print()
+    return table.table
 
 
 def predict_rub_salary_for_superJob(vacantion):
-    if vacantion['payment_from'] and vacantion['payment_to']:
-        avg_salary = int((vacantion['payment_from'] + vacantion['payment_to']) / 2)
-        return avg_salary
-    return None
+    if not vacantion['payment_from'] or not vacantion['payment_to']:
+        return None
+    return int((vacantion['payment_from'] + vacantion['payment_to']) / 2)
 
 
 def get_avg_salary_for_one_language_superjob(language):
@@ -127,10 +126,10 @@ def main():
     languages = ['python', 'java', 'goland', 'javascript', 'ruby', 'c++']
 
     avg_salary_superjob = get_avg_salary_superjob(languages)
-    make_table('Superjob', avg_salary_superjob)
+    print(make_table('Superjob', avg_salary_superjob))
 
     avg_salary_headhumter = get_avg_salary_headhumter(languages)
-    make_table('HeadHunter', avg_salary_headhumter)
+    print(make_table('HeadHunter', avg_salary_headhumter))
 
 
 if __name__ == '__main__':
