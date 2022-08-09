@@ -37,7 +37,7 @@ def predict_rub_salary_for_superJob(vacantion):
     return None
 
 
-def superjob_avg_salary(languages):
+def get_avg_salary_superjob(languages):
     period_days = 7
     open_access = 1
 
@@ -73,7 +73,7 @@ def superjob_avg_salary(languages):
     make_table('SuperJob', languages_avg_salary)
 
 
-def hh_avg_salary(languages):
+def get_avg_salary_headhumter(languages):
     period_days = 3
     moscow_region = 1
 
@@ -117,5 +117,5 @@ def hh_avg_salary(languages):
 if __name__ == '__main__':
     load_dotenv()
     languages = ['python', 'java', 'goland', 'javascript', 'ruby', 'c++']
-    superjob_avg_salary(languages)
-    hh_avg_salary(languages)
+    get_avg_salary_superjob(languages)
+    get_avg_salary_headhumter(languages)
