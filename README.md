@@ -1,6 +1,6 @@
 # api_programmers_avg_salary
 
-Parsing HeadHunter, SuperJob and get average salary of the most populat programming languages
+Parsing HeadHunter, SuperJob and get average salary of the most populat programming languages.
 
 
 ## Install
