@@ -96,6 +96,7 @@ def get_json_page_hh(page, language):
 def get_avg_salary_for_one_language_headhunter(language):
     vacancy_salaries = []
     vacancies_on_page = []
+    vacancies_processed = 0
 
     for page in count():
         all_page = get_json_page_hh(page, language)
@@ -108,11 +109,7 @@ def get_avg_salary_for_one_language_headhunter(language):
             avg_salary = predict_rub_salary_for_hh(vacancy)
             if avg_salary:
                 vacancy_salaries.append(avg_salary)
-
-    if sum(vacancies_on_page) > all_page['found']:
-        vacancies_processed = all_page['found']
-    else:
-        vacancies_processed = sum(vacancies_on_page)
+                vacancies_processed += 1
 
     return {'average_salary': int(sum(vacancy_salaries) / len(vacancy_salaries)),
             'vacancies_found': all_page['found'],
