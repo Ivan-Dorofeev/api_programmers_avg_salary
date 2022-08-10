@@ -37,13 +37,13 @@ def predict_rub_salary_for_hh(vacancy):
     return calculate_avg_salary(salary_from, salary_to)
 
 
-def predict_rub_salary_for_superJob(vacantion):
+def predict_rub_salary_for_superjob(vacantion):
     salary_from = vacantion['payment_from']
     salary_to = vacantion['payment_to']
     return calculate_avg_salary(salary_from, salary_to)
 
 
-def get_json_page_superjob(page, language, api_key):
+def get_superjob_salaries_page(page, language, api_key):
     period_days = 7
     open_access = 1
     response = requests.get('https://api.superjob.ru/2.0/vacancies',
@@ -62,9 +62,9 @@ def get_avg_salary_for_one_language_superjob(language, api_key):
     vacancy_salaries = []
 
     for page in count():
-        vacancy_pages = get_json_page_superjob(page, language, api_key)
+        vacancy_pages = get_superjob_salaries_page(page, language, api_key)
         for vacancy in vacancy_pages['objects']:
-            avg_salary = predict_rub_salary_for_superJob(vacancy)
+            avg_salary = predict_rub_salary_for_superjob(vacancy)
             if avg_salary:
                 vacancy_salaries.append(avg_salary)
 
@@ -81,7 +81,7 @@ def get_avg_salary_for_one_language_superjob(language, api_key):
             'processed_vacancies': len(vacancy_salaries)}
 
 
-def get_json_page_hh(page, language):
+def get_headhunter_salaries_page(page, language):
     period_days = 3
     moscow_region = 1
     url = 'https://api.hh.ru/vacancies'
@@ -99,7 +99,7 @@ def get_avg_salary_for_one_language_headhunter(language):
     vacancy_salaries = []
 
     for page in count():
-        vacancy_pages = get_json_page_hh(page, language)
+        vacancy_pages = get_headhunter_salaries_page(page, language)
         if page >= vacancy_pages['pages']:
             break
 
@@ -125,7 +125,7 @@ def get_avg_salary_superjob(languages, api_key):
     return languages_avg_salary
 
 
-def get_avg_salary_headhumter(languages):
+def get_avg_salary_headhunter(languages):
     languagies_avg_salary = {}
     for language in languages:
         languagies_avg_salary[language] = get_avg_salary_for_one_language_headhunter(language)
@@ -140,7 +140,7 @@ def main():
     avg_salary_superjob = get_avg_salary_superjob(languages, super_job_api_key)
     print(make_table('Superjob', avg_salary_superjob))
 
-    avg_salary_headhumter = get_avg_salary_headhumter(languages)
+    avg_salary_headhumter = get_avg_salary_headhunter(languages)
     print(make_table('HeadHunter', avg_salary_headhumter))
 
 
