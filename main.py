@@ -59,14 +59,14 @@ def get_avg_salary_for_one_language_superjob(language, api_key):
     vacancies_on_page = 0
 
     for page in count():
-        all_page = get_json_page_superjob(page, language, api_key)
-        for vacancy in all_page['objects']:
+        vacancy_pages = get_json_page_superjob(page, language, api_key)
+        for vacancy in vacancy_pages['objects']:
             avg_salary = predict_rub_salary_for_superJob(vacancy)
             if avg_salary:
                 vacancy_salaries.append(avg_salary)
                 vacancies_on_page += 1
 
-        if not all_page['more']:
+        if not vacancy_pages['more']:
             break
 
     if not vacancies_on_page:
@@ -75,7 +75,7 @@ def get_avg_salary_for_one_language_superjob(language, api_key):
                 'processed_vacancies': None}
 
     return {'average_salary': int(sum(vacancy_salaries) / len(vacancy_salaries)),
-            'vacancies_found': all_page['total'],
+            'vacancies_found': vacancy_pages['total'],
             'processed_vacancies': vacancies_on_page}
 
 
@@ -98,11 +98,11 @@ def get_avg_salary_for_one_language_headhunter(language):
     vacancies_on_page = 0
 
     for page in count():
-        all_page = get_json_page_hh(page, language)
-        if page >= all_page['pages']:
+        vacancy_pages = get_json_page_hh(page, language)
+        if page >= vacancy_pages['pages']:
             break
 
-        for vacancy in all_page['items']:
+        for vacancy in vacancy_pages['items']:
             avg_salary = predict_rub_salary_for_hh(vacancy)
             if avg_salary:
                 vacancy_salaries.append(avg_salary)
@@ -114,7 +114,7 @@ def get_avg_salary_for_one_language_headhunter(language):
                 'processed_vacancies': None}
 
     return {'average_salary': int(sum(vacancy_salaries) / len(vacancy_salaries)),
-            'vacancies_found': all_page['found'],
+            'vacancies_found': vacancy_pages['found'],
             'processed_vacancies': vacancies_on_page}
 
 
