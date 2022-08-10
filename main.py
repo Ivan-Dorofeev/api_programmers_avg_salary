@@ -19,24 +19,28 @@ def make_table(title, avg_languages_salary):
     return table.table
 
 
+def calculate_avg_salary(salary_from, salary_to):
+    if not salary_from and not salary_to:
+        return None
+    elif salary_from:
+        return int(salary_from * 1.2)
+    elif salary_to:
+        return int(salary_to * 0.8)
+    return int((salary_from + salary_to) / 2)
+
+
 def predict_rub_salary_for_hh(vacancy):
     if not vacancy['salary']:
         return None
-    elif vacancy['salary']['from']:
-        return int(vacancy['salary']['from'] * 1.2)
-    elif vacancy['salary']['from']:
-        return int(vacancy['salary']['to'] * 0.8)
-    return int((vacancy['salary']['from'] + vacancy['salary']['to']) / 2)
+    salary_from = vacancy['salary']['from']
+    salary_to = vacancy['salary']['to']
+    return calculate_avg_salary(salary_from, salary_to)
 
 
 def predict_rub_salary_for_superJob(vacantion):
-    if not vacantion['payment_from'] and not vacantion['payment_to']:
-        return None
-    elif vacantion['payment_from'] and not vacantion['payment_to']:
-        return int(vacantion['payment_from'] * 1.2)
-    elif not vacantion['payment_from'] and vacantion['payment_to']:
-        return int(vacantion['payment_to'] * 0.8)
-    return int((vacantion['payment_from'] + vacantion['payment_to']) / 2)
+    salary_from = vacantion['payment_from']
+    salary_to = vacantion['payment_to']
+    return calculate_avg_salary(salary_from, salary_to)
 
 
 def get_json_page_superjob(page, language, api_key):
