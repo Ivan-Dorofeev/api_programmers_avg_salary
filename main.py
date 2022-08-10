@@ -62,13 +62,13 @@ def get_avg_salary_for_one_language_superjob(language, api_key):
     vacancy_salaries = []
 
     for page in count():
-        vacancy_pages = get_superjob_salaries_page(page, language, api_key)
-        for vacancy in vacancy_pages['objects']:
+        vacancy_page = get_superjob_salaries_page(page, language, api_key)
+        for vacancy in vacancy_page['objects']:
             avg_salary = predict_rub_salary_for_superjob(vacancy)
             if avg_salary:
                 vacancy_salaries.append(avg_salary)
 
-        if not vacancy_pages['more']:
+        if not vacancy_page['more']:
             break
 
     if not vacancy_salaries:
@@ -77,7 +77,7 @@ def get_avg_salary_for_one_language_superjob(language, api_key):
                 'processed_vacancies': None}
 
     return {'average_salary': int(sum(vacancy_salaries) / len(vacancy_salaries)),
-            'vacancies_found': vacancy_pages['total'],
+            'vacancies_found': vacancy_page['total'],
             'processed_vacancies': len(vacancy_salaries)}
 
 
@@ -99,11 +99,11 @@ def get_avg_salary_for_one_language_headhunter(language):
     vacancy_salaries = []
 
     for page in count():
-        vacancy_pages = get_headhunter_salaries_page(page, language)
-        if page >= vacancy_pages['pages']:
+        vacancy_page = get_headhunter_salaries_page(page, language)
+        if page >= vacancy_page['pages']:
             break
 
-        for vacancy in vacancy_pages['items']:
+        for vacancy in vacancy_page['items']:
             avg_salary = predict_rub_salary_for_hh(vacancy)
             if avg_salary:
                 vacancy_salaries.append(avg_salary)
@@ -114,7 +114,7 @@ def get_avg_salary_for_one_language_headhunter(language):
                 'processed_vacancies': None}
 
     return {'average_salary': int(sum(vacancy_salaries) / len(vacancy_salaries)),
-            'vacancies_found': vacancy_pages['found'],
+            'vacancies_found': vacancy_page['found'],
             'processed_vacancies': len(vacancy_salaries)}
 
 
