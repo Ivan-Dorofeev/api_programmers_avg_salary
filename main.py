@@ -60,7 +60,6 @@ def get_json_page_superjob(page, language, api_key):
 
 def get_avg_salary_for_one_language_superjob(language, api_key):
     vacancy_salaries = []
-    vacancies_on_page = 0
 
     for page in count():
         vacancy_pages = get_json_page_superjob(page, language, api_key)
@@ -68,19 +67,18 @@ def get_avg_salary_for_one_language_superjob(language, api_key):
             avg_salary = predict_rub_salary_for_superJob(vacancy)
             if avg_salary:
                 vacancy_salaries.append(avg_salary)
-                vacancies_on_page += 1
 
         if not vacancy_pages['more']:
             break
 
-    if not vacancies_on_page:
+    if not vacancy_salaries:
         return {'average_salary': None,
                 'vacancies_found': None,
                 'processed_vacancies': None}
 
     return {'average_salary': int(sum(vacancy_salaries) / len(vacancy_salaries)),
             'vacancies_found': vacancy_pages['total'],
-            'processed_vacancies': vacancies_on_page}
+            'processed_vacancies': len(vacancy_salaries)}
 
 
 def get_json_page_hh(page, language):
@@ -99,7 +97,6 @@ def get_json_page_hh(page, language):
 
 def get_avg_salary_for_one_language_headhunter(language):
     vacancy_salaries = []
-    vacancies_on_page = 0
 
     for page in count():
         vacancy_pages = get_json_page_hh(page, language)
@@ -110,16 +107,15 @@ def get_avg_salary_for_one_language_headhunter(language):
             avg_salary = predict_rub_salary_for_hh(vacancy)
             if avg_salary:
                 vacancy_salaries.append(avg_salary)
-                vacancies_on_page += 1
 
-    if not vacancies_on_page:
+    if not vacancy_salaries:
         return {'average_salary': None,
                 'vacancies_found': None,
                 'processed_vacancies': None}
 
     return {'average_salary': int(sum(vacancy_salaries) / len(vacancy_salaries)),
             'vacancies_found': vacancy_pages['found'],
-            'processed_vacancies': vacancies_on_page}
+            'processed_vacancies': len(vacancy_salaries)}
 
 
 def get_avg_salary_superjob(languages, api_key):
