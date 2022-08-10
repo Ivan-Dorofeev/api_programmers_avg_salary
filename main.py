@@ -73,7 +73,7 @@ def get_avg_salary_for_one_language_superjob(language, api_key):
 
     if not vacancy_salaries:
         return {'average_salary': None,
-                'vacancies_found': None,
+                'vacancies_found': vacancy_page['found'],
                 'processed_vacancies': None}
 
     return {'average_salary': int(sum(vacancy_salaries) / len(vacancy_salaries)),
@@ -110,7 +110,7 @@ def get_avg_salary_for_one_language_headhunter(language):
 
     if not vacancy_salaries:
         return {'average_salary': None,
-                'vacancies_found': None,
+                'vacancies_found': vacancy_page['found'],
                 'processed_vacancies': None}
 
     return {'average_salary': int(sum(vacancy_salaries) / len(vacancy_salaries)),
